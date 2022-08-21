@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
-
+import { signUpYup } from "./schemas";
 const initialFormValues = {
   name: "",
   email: "",
@@ -8,16 +8,15 @@ const initialFormValues = {
   confirmpassword: "",
 };
 function Registration() {
-  const { values, errors, handleBlur, handleChange, touched, handleSubmit } =
-    useFormik({
-      initialValues: initialFormValues,
-      onSubmit: (values) => {
-        console.log(
-          "🚀 ~ file: Registration.jsx ~ line 15 ~ Registration ~ values",
-          values
-        );
-      },
-    });
+  const { values, errors, handleChange, touched, handleSubmit } = useFormik({
+    initialValues: initialFormValues,
+    validationSchema: signUpYup,
+    onSubmit: (values, action) => {
+      console.log(values);
+      //Reset form
+      action.resetForm();
+    },
+  });
 
   return (
     <div className="container">
@@ -35,6 +34,9 @@ function Registration() {
               value={values.name}
               onChange={handleChange}
             />
+            {errors.name && touched.name ? (
+              <p className="text-danger">{errors.name}</p>
+            ) : null}
           </div>
           <div className="col-md-6">
             <label htmlFor="email">Email</label>
@@ -48,6 +50,9 @@ function Registration() {
               value={values.email}
               onChange={handleChange}
             />
+            {errors.email && touched.email ? (
+              <p className="text-danger">{errors.email}</p>
+            ) : null}
           </div>
         </div>
         <div className="row">
@@ -63,6 +68,9 @@ function Registration() {
               value={values.password}
               onChange={handleChange}
             />
+            {errors.password && touched.password ? (
+              <p className="text-danger">{errors.password}</p>
+            ) : null}
           </div>
           <div className="col-md-6">
             <label htmlFor="confirmpassword">Confirm Password</label>
@@ -76,6 +84,9 @@ function Registration() {
               value={values.confirmpassword}
               onChange={handleChange}
             />
+            {errors.confirmpassword && touched.password ? (
+              <p className="text-danger">{errors.confirmpassword}</p>
+            ) : null}
           </div>
         </div>
         <div className="row" style={{ marginTop: "20px" }}>
